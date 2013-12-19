@@ -27,8 +27,9 @@ public class Main {
 
         parseArguments(args);
         loadConfiguration();
-        if ("republish".equals(action))
+        if ("unpublish".equals(action) || "republish".equals(action))
             deleteAd();
+        if ("publish".equals(action) || "republish".equals(action))
         postAd();
     }
 
@@ -39,7 +40,7 @@ public class Main {
             printUsageAndExit("Too many parameters.");
 
         action = args[0];
-        if ("publish".equals(action) == false && "republish".equals(action) == false)
+        if ("publish".equals(action) == false && "unpublish".equals(action) == false && "republish".equals(action) == false)
             printUsageAndExit("Invalid ACTION.");
 
         pathname = args[1];
