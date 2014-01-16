@@ -3,10 +3,12 @@ package com.seigneurin.adManager;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
+
 import org.junit.Assert;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -161,7 +163,8 @@ public class Main {
 
         HtmlFileInput imageInput = (HtmlFileInput) postAdPage.getElementById("image0");
         imageInput.setValueAttribute(objectSettings.imagePath);
-        imageInput.setContentType("image/jpeg");
+        String contentType = URLConnection.guessContentTypeFromName(objectSettings.imagePath);
+        imageInput.setContentType(contentType);
         // HtmlSubmitInput uploadButton = (HtmlSubmitInput)
         // postAdPage.getFirstByXPath("//input[@class='button-upload']");
         // postAdPage = uploadButton.click();
@@ -254,7 +257,7 @@ public class Main {
 
         String[] imageFiles = path.list(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".jpg");
+                return name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png");
             }
         });
         if (imageFiles.length >= 1)
