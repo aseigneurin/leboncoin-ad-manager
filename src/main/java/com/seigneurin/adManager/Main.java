@@ -162,13 +162,17 @@ public class Main {
         HtmlInput priceElement = form.getInputByName("price");
         priceElement.setValueAttribute(objectSettings.price);
 
-        HtmlFileInput imageInput = (HtmlFileInput) postAdPage.getElementById("image0");
-        imageInput.setValueAttribute(objectSettings.imagePath);
-        String contentType = URLConnection.guessContentTypeFromName(objectSettings.imagePath);
-        imageInput.setContentType(contentType);
-        // HtmlSubmitInput uploadButton = (HtmlSubmitInput)
-        // postAdPage.getFirstByXPath("//input[@class='button-upload']");
-        // postAdPage = uploadButton.click();
+        int nbImages = java.lang.Math.min(3, objectSettings.imageFiles.length);
+        for(int i = 0; i < nbImages; i++) {
+            HtmlFileInput imageInput = (HtmlFileInput) postAdPage.getElementById("image" + i);
+            String imagePath = objectSettings.imageFiles[i].getAbsolutePath();
+            imageInput.setValueAttribute(imagePath);
+            String contentType = URLConnection.guessContentTypeFromName(imagePath);
+            imageInput.setContentType(contentType);
+            // HtmlSubmitInput uploadButton = (HtmlSubmitInput)
+            // postAdPage.getFirstByXPath("//input[@class='button-upload']");
+            // postAdPage = uploadButton.click();
+        }
 
         logger.log(Level.INFO, "Validation...");
 
@@ -260,13 +264,11 @@ public class Main {
         FileInputStream objectYamlFileStream = new FileInputStream(objectYamlFilename);
         objectSettings = yaml.loadAs(objectYamlFileStream, ObjectSettings.class);
 
-        String[] imageFiles = path.list(new FilenameFilter() {
+        objectSettings.imageFiles = path.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png");
             }
         });
-        if (imageFiles.length >= 1)
-            objectSettings.imagePath = path + File.separator + imageFiles[0];
     }
 
     private static void selectOption(HtmlSelect selectElement, String optionText) {
