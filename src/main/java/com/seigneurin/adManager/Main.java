@@ -1,6 +1,7 @@
 package com.seigneurin.adManager;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 
@@ -191,8 +192,12 @@ public class Main {
 
         logger.log(Level.INFO, "Remplissage des champs 'Vérifiez le contenu de votre annonce'...");
 
-        HtmlSelect cityElement = form.getSelectByName("city");
-        selectOption(cityElement, sellerSettings.city);
+        try {
+        	HtmlSelect cityElement = form.getSelectByName("city");
+            selectOption(cityElement, sellerSettings.city);
+        } catch(ElementNotFoundException e) {
+            logger.log(Level.INFO, "Pas de champs 'city'");
+        }
 
         HtmlCheckBoxInput acceptRuleCheckBox = form.getInputByName("accept_rule");
         acceptRuleCheckBox.setChecked(true);
