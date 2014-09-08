@@ -1,18 +1,31 @@
 package com.seigneurin.adManager;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
-
-import org.junit.Assert;
-import org.yaml.snakeyaml.Yaml;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.junit.Assert;
+import org.yaml.snakeyaml.Yaml;
+
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 
 public class Main {
 
@@ -33,7 +46,7 @@ public class Main {
         if ("unpublish".equals(action) || "republish".equals(action))
             deleteAd();
         if ("publish".equals(action) || "republish".equals(action))
-        postAd();
+            postAd();
     }
 
     private static void parseArguments(String[] args) {
@@ -43,7 +56,8 @@ public class Main {
             printUsageAndExit("Too many parameters.");
 
         action = args[0];
-        if ("publish".equals(action) == false && "unpublish".equals(action) == false && "republish".equals(action) == false)
+        if ("publish".equals(action) == false && "unpublish".equals(action) == false
+                && "republish".equals(action) == false)
             printUsageAndExit("Invalid ACTION.");
 
         pathname = args[1];
@@ -163,7 +177,7 @@ public class Main {
         priceElement.setValueAttribute(objectSettings.price);
 
         int nbImages = java.lang.Math.min(3, objectSettings.imageFiles.length);
-        for(int i = 0; i < nbImages; i++) {
+        for (int i = 0; i < nbImages; i++) {
             HtmlFileInput imageInput = (HtmlFileInput) postAdPage.getElementById("image" + i);
             String imagePath = objectSettings.imageFiles[i].getAbsolutePath();
             imageInput.setValueAttribute(imagePath);
@@ -197,9 +211,9 @@ public class Main {
         logger.log(Level.INFO, "Remplissage des champs 'Vérifiez le contenu de votre annonce'...");
 
         try {
-        	HtmlSelect cityElement = form.getSelectByName("city");
+            HtmlSelect cityElement = form.getSelectByName("city");
             selectOption(cityElement, sellerSettings.city);
-        } catch(ElementNotFoundException e) {
+        } catch (ElementNotFoundException e) {
             logger.log(Level.INFO, "Pas de champs 'city'");
         }
 
