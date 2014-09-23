@@ -2,7 +2,6 @@ package com.seigneurin.adManager;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URLConnection;
@@ -263,19 +262,19 @@ public class Main {
         Assert.assertTrue(endPage.asText().contains("bien été prise en compte."));
     }
 
-    private static void loadConfiguration() throws FileNotFoundException {
+    private static void loadConfiguration() throws IOException {
         Yaml yaml = new Yaml();
 
         File path = new File(pathname);
 
-        String sellerYamlFilename = path.getParent() + File.separator + "settings.yaml";
-        logger.log(Level.INFO, "Chargement des propriétés du vendeur : " + sellerYamlFilename);
-        FileInputStream mainYamlFileStream = new FileInputStream(sellerYamlFilename);
+        File sellerYamlFile = new File(path.getCanonicalFile().getParent(), "settings.yaml");
+        logger.log(Level.INFO, "Chargement des propriétés du vendeur : " + sellerYamlFile);
+        FileInputStream mainYamlFileStream = new FileInputStream(sellerYamlFile);
         sellerSettings = yaml.loadAs(mainYamlFileStream, SellerSettings.class);
 
-        String objectYamlFilename = path + File.separator + "settings.yaml";
-        logger.log(Level.INFO, "Chargement des propriétés de l'objet : " + objectYamlFilename);
-        FileInputStream objectYamlFileStream = new FileInputStream(objectYamlFilename);
+        File objectYamlFile = new File(path.getCanonicalFile(), "settings.yaml");
+        logger.log(Level.INFO, "Chargement des propriétés de l'objet : " + objectYamlFile);
+        FileInputStream objectYamlFileStream = new FileInputStream(objectYamlFile);
         objectSettings = yaml.loadAs(objectYamlFileStream, ObjectSettings.class);
 
         objectSettings.imageFiles = path.listFiles(new FilenameFilter() {
