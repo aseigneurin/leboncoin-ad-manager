@@ -84,7 +84,7 @@ public class Main {
 
         logger.log(Level.INFO, "Chargement de la page d'accueil...");
         HtmlPage homePage = webClient.getPage("http://www.leboncoin.fr/");
-        Assert.assertEquals("Petites annonces gratuites d'occasion - leboncoin.fr", homePage.getTitleText());
+        Assert.assertEquals("Site de petites annonces gratuites d'occasion - leboncoin.fr", homePage.getTitleText());
 
         // click the link to the region
 
@@ -111,7 +111,7 @@ public class Main {
         HtmlInput okButton = form.getFirstByXPath("//input[@type='submit']");
         HtmlPage accountPage = okButton.click();
         Assert.assertNotNull(accountPage);
-        Assert.assertEquals("Compte", accountPage.getTitleText());
+        Assert.assertEquals("Accéder à mon compte - Leboncoin.fr", accountPage.getTitleText());
         return accountPage;
     }
 
@@ -127,7 +127,7 @@ public class Main {
 
         HtmlPage postAdPage = postAdLink.click();
         Assert.assertNotNull(postAdPage);
-        Assert.assertEquals("Formulaire de dépôt de petites annonces gratuites sur Leboncoin.fr",
+        Assert.assertEquals("Déposer une petite annonce - Leboncoin.fr",
                 postAdPage.getTitleText());
 
         // fill-in the form
@@ -225,7 +225,7 @@ public class Main {
         logger.log(Level.INFO, "Terminé !");
 
         Assert.assertEquals("Confirmation d'envoi de votre annonce", creationPage.getTitleText());
-        Assert.assertTrue(creationPage.asText().contains("Votre annonce a été envoyée à notre équipe éditoriale."));
+        Assert.assertTrue(creationPage.asText().contains("Nous avons bien reçu votre annonce."));
     }
 
     private static void deleteAd() throws Exception {
